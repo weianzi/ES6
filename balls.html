@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>promise</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <style type="text/css">
+        .box{
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .ball{
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 0;
+            border-radius: 50%;
+        }
+        .ball01{
+            top: 10px;
+            background: red;
+        }
+        .ball02{
+            top: 50px;
+            background: blue;
+        }
+        .ball03{
+            top: 90px;
+            background: green;
+        }
+
+        .ball_01{
+            top: 200px;
+            background: #000;
+        }
+        .ball_02{
+            top: 240px;
+            background: #ddd;
+        }
+        .ball_03{
+            top: 280px;
+            background: #960;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="ball ball01"></div>
+        <div class="ball ball02"></div>
+        <div class="ball ball03"></div>
+
+        <div class="ball ball_01"></div>
+        <div class="ball ball_02"></div>
+        <div class="ball ball_03"></div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script>
+        var $ball01 = $('.ball01');
+        var $ball02 = $('.ball02');
+        var $ball03 = $('.ball03');
+        function move($ele, left, time, callback) {
+            setTimeout(function(){
+                $ele.animate({left: left}, 1000);
+                callback();
+            }, time);
+        }
+        move($ball01, '50px', 1, function () {
+            move($ball02, '100px', 1000, function () {
+                move($ball03, '150px', 1000, function () {
+                    move($ball03, '50px', 1000, function () {
+                        move($ball02, '0', 1000, function () {
+                            move($ball01, '100px', 1000, function () {
+                                //回调地狱
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        //以下 promise 方式，chrome56正常
+        var $ball_01 = $('.ball_01');
+        var $ball_02 = $('.ball_02');
+        var $ball_03 = $('.ball_03');
+        function movePromise($ele, left, time) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    $ele.animate({left: left}, 1000);
+                    resolve();
+                }, time);
+            });
+        }
+        movePromise($ball_01, '50px', 1)
+            .then(() => movePromise($ball_02, '100px', 1000))
+            .then(() => movePromise($ball_03, '150px', 1000))
+            .then(() => movePromise($ball_03, '50px', 1000))
+            .then(() => movePromise($ball_02, '0', 1000))
+            .then(() => movePromise($ball_01, '100px', 1000));
+    </script>
+</body>
+</html>
