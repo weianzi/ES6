@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Chlid extends Component {
+class Child extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -43,4 +43,4 @@ class Chlid extends Component {
   }
 }
 
-export default Chlid;
+export default Child;
