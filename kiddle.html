@@ -132,6 +132,14 @@
             textareaBox.hide();
         });
     });
+    document.addEventListener('touchend',touch, false);
+    function touch(event) {
+        var txt;
+        txt = window.getSelection();
+        if (txt.toString().length > 1) {
+            alert(txt);
+        }
+     }
     </script>
 </body>
 
