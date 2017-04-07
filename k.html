@@ -18,7 +18,12 @@
     }
     
     .md {
-        background: #d3fffd;
+        display: inline-block;
+        background: #28a213;
+        color: #fff;
+        font-size: 10px;
+        padding: 0 4px;
+        border-radius: 50%;
     }
     
     #textareaBox {
@@ -26,31 +31,22 @@
         position: fixed;
         bottom: 0;
         left: 0;
-        height: 100px;
+        height: 80px;
         width: 100%;
         background: #5dbdec;
-    }
-    
-    #textareaBox .text {
-        height: 20px;
-        line-height: 20px;
-        overflow: hidden;
-        font-size: 12px;
-        color: #fff;
     }
     
     #textareaBox textarea {
         width: 94%;
         height: 36px;
-        margin: 1% 2% 0;
+        margin: 2% 2% 0;
     }
     
     #textareaBox .bottom {
         text-align: center;
         font-size: 14px;
     }
-    
-    #textareaBox .bottom a {
+    #textareaBox .bottom a{
         margin-right: 10px;
     }
     </style>
@@ -61,11 +57,11 @@
         <p>温馨提示：在春运，交易会，暑运等旺季期间，无法保证经济舱全票价的订座。 </p>
         <p>*目前可提供便捷签证服务的国家有新西兰、澳大利亚，详情请查阅便捷签证服务页面。 * </p>
         <p>精英级别奖励里程仅为明珠金、银卡会员享有，在航线标准里程的基础上额外奖励相应的比例。 </p>
-        <p>1、精英级别奖励里程仅记入"奖励里程"，不计入会员的"升级里程"。 <span class="md">2、不可累积里程的舱位</span>（如南航N/R/J/X/P/I/O/Z舱）不可得到精英级别奖励里程。 3、南航会员乘坐联盟航空公司航班可累积精英级别奖励里程。 ** </p>
-        <p>南航精英等级会员权益仅在会员乘坐市场方和承运方均为南航的航班时提供。 1、南航精英等级会员权益-享用休息室： * </p>
+        <p>1、精英级别奖励里程仅记入"奖励里程"，不计入会员的"升级里程"。 2、不可累积里程的舱位（如南航N/R/J/X/P/I/O/Z舱）不可得到精英级别奖励里程。 3、南航会员乘坐联盟航空公司航班可累积精英级别奖励里程。 ** </p>
+        <p>南航精英等级会员权益仅在会员乘坐市场方和承运方均为南航的航班时提供。 1、南航精英等级会员权益-享用休息室： * <span class="md">1</span></p>
         <p>南航明珠金卡可携带一名当天同是乘坐南航航班的旅客共同进入贵宾休息室候机；南航明珠银卡会员仅限本人进入。 * </p>
-        <p>对于由南航金卡会员邀请进入休息室的该名随行人员，其在申请休息室准入权时<span class="md">必须与南航金卡会员</span>同时出现。 * </p>
-        <p>南航仅在与南航签署休息室服务代理协议或由南航运营的机场休息室提供休息室服务。 </p>
+        <p>对于由南航金卡会员邀请进入休息室的该名随行人员，其在申请休息室准入权时必须与南航金卡会员同时出现。 * </p>
+        <p>南航仅在与南航签署休息室服务代理协议或由南航运营的机场休息室提供休息室服务。 <span class="md">88</span></p>
         <p>2、南航精英等级会员权益-额外免费行李额：计件制航班额外免费行李的重量和尺寸要求，按会员所持客票座位等级对应的标准提供。 3、当乘坐南航豪华头等舱、头等舱、公务舱时，南航明珠金卡、银卡会员可享受远机位贵宾车服务（目前能提供该服务的机场有：广州、乌鲁木齐、沈阳、北京、深圳、哈尔滨、长春、大连、郑州、武汉、长沙、海口、三亚、汕头、珠海、上海浦东、上海虹桥）。 </p>
         <p>4、航班不正常时，在餐食、住宿、赔偿方面，金卡会员享受头等舱旅客待遇，银卡会员享受公务舱旅客待遇。 *** </p>
         <p>有关天合联盟等级会员权益的信息，可登陆天合联盟网站 www.skyteam.com 查询。 1、天合联盟精英等级会员权益-保证本人经济舱全票价订座：一般仅在6小时及以上的联盟国际航班上提供，联盟超级精英至少需在航班起飞24小时前向承运的联盟航空公司提出申请。 </p>
@@ -77,7 +73,6 @@
     </div>
     <div id="btn">写批注</div>
     <div id="textareaBox">
-        <div class="text">选中：<span id="selectText"></span></div>
         <textarea placeholder="请输入批注内容"></textarea>
         <div class="bottom">
             <a class="btn-enter" href="javascript:;">确定</a>
@@ -91,53 +86,37 @@
         var btnCancel = $('.btn-cancel');
         var btnEnter = $('.btn-enter');
         var textareaBox = $('#textareaBox');
-        var selectText = $('#selectText');
-        var curText = '';
+        var curHtml = '';
+        var index = 0;
         var curNum = 0;
         var pItem = $('.content > p');
-        var pHtml = '';
-        var index = 0;
-        //var oldContent = $('.content').html();
-        //选中文字
-        document.addEventListener('touchend', touchText, false);
-        function touchText(ev) {
-            console.log(1);
-            var txt = window.getSelection() || '';
-            if (txt.toString().length > 0) {
-                curText = txt;
-                selectText.text(txt);
-                btn.css({
-                    left: ev.changedTouches[0].clientX,
-                    top: ev.changedTouches[0].clientY
-                }).show();
-                textareaBox.hide();
-            }
-        }
-
-
         pItem.each(function(i) {
             $(this).click(function(ev) {
-                //console.log(3);
+                curHtml = $(this).html();
+                curNum = parseInt($(this).find('.md').text(), 10) || 0;
                 index = i;
-                pHtml = $(this).html();
+                btn.css({
+                    left: ev.clientX,
+                    top: ev.clientY
+                }).show();
+                textareaBox.hide();
+                console.log(curHtml);
+                console.log(index);
             });
         });
 
         //取消
         btnCancel.click(function() {
-            curText = '';
+            curHtml = '';
+            index = 0;
             textareaBox.hide();
         });
 
         //确定
         btnEnter.click(function() {
-            //console.log(2);
             curNum++;
-            var t=selectText.text();
-            var arr = pHtml.split(t);
-            console.log(arr);
-            newHtml = arr[0] + '<span class="md">' + curText + '</span>' + arr[1];
-            pItem.eq(index).html(newHtml);
+            pItem.eq(index).find('.md').remove();
+            pItem.eq(index).append('<span class="md">' + curNum + '</span>');
             textareaBox.hide();
         });
 
@@ -152,8 +131,20 @@
             btn.hide();
             textareaBox.hide();
         });
-
+      
     });
+
+
+    //选中文字
+        document.addEventListener('touchend', touchText, false);
+        function touchText() {
+            var txt = '';
+            txt = window.getSelection();
+            if (txt.toString().length > 1) {
+                alert(txt);
+            }
+        }
+
     </script>
 </body>
 
