@@ -21,7 +21,7 @@
         margin: 20px;
     }
     </style>
-    <script type="text/javascript" src="data:application/octet-stream;base64,KGZ1bmN0aW9uKCl7IHdpbmRvdy5CTWFwX2xvYWRTY3JpcHRUaW1lID0gKG5ldyBEYXRlKS5nZXRUaW1lKCk7IGRvY3VtZW50LndyaXRlKCc8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCIgc3JjPSJodHRwOi8vYXBpLm1hcC5iYWlkdS5jb20vZ2V0c2NyaXB0P3Y9MS41JmFrPVlXZEdwbGhZalVHUTNHdHBLTmV1VE0yUyZzZXJ2aWNlcz0mdD0yMDE1MDUyMjA5NDY1NiI+PC9zY3JpcHQ+Jyk7fSkoKTs="></script>
+    <script src="http://api.map.baidu.com/api?v=1.5&ak=YWdGplhYjUGQ3GtpKNeuTM2S"></script>
 </head>
 
 <body>
@@ -42,10 +42,13 @@
         if (pointsLen == 0) {
             return;
         }
-        var myIcon = new BMap.Icon("track.ico", new BMap.Size(5, 5), {
-            offset: new BMap.Size(5, 5)
+        /*var myIcon = new BMap.Icon("fly.png", new BMap.Size(20, 20), {
+            offset: new BMap.Size(20, 20)
+        });*/
+        var myIcon = new BMap.Icon("fly.png", new BMap.Size(23, 25), {
+            offset: new BMap.Size(10, 25), // 指定定位位置
+            imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
         });
-
         // 创建标注对象并添加到地图   
         for (var i = 0; i < pointsLen; i++) {
             var point = new BMap.Point(points[i].lng, points[i].lat);
@@ -117,15 +120,15 @@
         //var newLinePoints = [];
         //var len;
         makerPoints.push(point);
-        //addMarker(makerPoints);//增加对应该的轨迹点
         points.push(point);
         //bPoints.push(new BMap.Point(lng, lat));
         //len = points.length;
         //newLinePoints = points.slice(len - 2, len); //最后两个点用来画线。
-        newPointsDashed = pointsDashed.slice(points.length-1, pointsDashed.length);
+        newPointsDashed = pointsDashed.slice(points.length - 1, pointsDashed.length);
         console.log(points, newPointsDashed)
 
-        map.clearOverlays(); //清除折线
+        map.clearOverlays(); //清除折线         
+        addMarker(makerPoints); //增加对应该的轨迹点
         addDashedLine(newPointsDashed); //画虚线
         addLine(points); //增加轨迹线
         //setZoom(bPoints);
@@ -165,6 +168,12 @@
             "id": id
         });
     }
+    pointsDashed.push({
+        "lng": 121,
+        "lat": 50,
+        "status": 2,
+        "id": 9009
+    });
     //console.log(pointsDashed);
     newPointsDashed = pointsDashed.slice(points.length, pointsDashed.length);
     //地图操作开始
