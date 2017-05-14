@@ -18,7 +18,6 @@
     
     #container {
         height: 100%;
-        
     }
     </style>
     <script src="http://api.map.baidu.com/api?v=2.0&ak=srpbYTidksiwvfrsfXa8IHfk"></script>
@@ -27,8 +26,123 @@
 <body>
     <div id="container"></div>
     <script type="text/javascript">
-    // 实时轨迹demo。
-    // 实际运用的话可能ajax实时读取后台数据，加载到地图上。
+    //数据准备
+    var marker = null; //飞机模型
+    var preNum = 0; //上一个点
+    var points = []; //原始点信息数组
+    var pointsDashed = [{
+        "lng": 101,
+        "lat": 37.1,
+        "status": 1,
+        "id": "b0"
+    }, {
+        "lng": 102.2,
+        "lat": 39,
+        "status": 1,
+        "id": "b1"
+    }, {
+        "lng": 103.5,
+        "lat": 41,
+        "status": 1,
+        "id": "b2"
+    }, {
+        "lng": 104.8,
+        "lat": 43,
+        "status": 1,
+        "id": "b3"
+    }, {
+        "lng": 105.08,
+        "lat": 45,
+        "status": 1,
+        "id": "b4"
+    }, {
+        "lng": 106.4,
+        "lat": 47,
+        "status": 1,
+        "id": "b5"
+    }, {
+        "lng": 107.3,
+        "lat": 49,
+        "status": 1,
+        "id": "b6"
+    }, {
+        "lng": 108.2,
+        "lat": 51,
+        "status": 1,
+        "id": "b7"
+    }, {
+        "lng": 109.9,
+        "lat": 53.6,
+        "status": 1,
+        "id": "b8"
+    }, {
+        "lng": 110,
+        "lat": 55.4,
+        "status": 1,
+        "id": "b9"
+    }];
+
+    //假设的真实数据
+    var pointsReal = [{
+        "lng": 101,
+        "lat": 37.2,
+        "status": 1,
+        "id": "b0"
+    }, {
+        "lng": 102.4,
+        "lat": 39.1,
+        "status": 1,
+        "id": "b1"
+    }, {
+        "lng": 103.8,
+        "lat": 41,
+        "status": 1,
+        "id": "b2"
+    }, {
+        "lng": 104.8,
+        "lat": 43.5,
+        "status": 1,
+        "id": "b3"
+    }, {
+        "lng": 105.08,
+        "lat": 45,
+        "status": 1,
+        "id": "b4"
+    }, {
+        "lng": 106.41,
+        "lat": 47,
+        "status": 1,
+        "id": "b5"
+    }, {
+        "lng": 108.3,
+        "lat": 49.6,
+        "status": 1,
+        "id": "b6"
+    }, {
+        "lng": 108.9,
+        "lat": 51,
+        "status": 1,
+        "id": "b7"
+    }, {
+        "lng": 109.9,
+        "lat": 53.6,
+        "status": 1,
+        "id": "b8"
+    }, {
+        "lng": 110,
+        "lat": 55.4,
+        "status": 1,
+        "id": "b9"
+    }];
+    //地图操作开始
+    var map = new BMap.Map("container");
+    map.centerAndZoom(new BMap.Point(103.388611, 35.563611), 5); //初始显示中国。
+    map.enableScrollWheelZoom(); //滚轮放大缩小
+
+    //画虚线
+    addDashedLine(pointsDashed);
+    //setTimeout(dynamicLine, 2000); //动态生成新的点。
+    dynamicLine(); //动态生成新的点。
 
 
     // 获取随机数
@@ -60,53 +174,35 @@
                 return 270 - Math.abs(angle);
             }
         }
-
     }
     //在轨迹点上创建图标，并添加点击事件，显示轨迹点信息。points,数组。
-    function addMarker(points, angle) {
-        map.removeOverlay(marker); //清除折线
-        var pointsLen = points.length;
+    function addMarker(thispoints, angle) {
+        map.removeOverlay(marker); //清除飞机
+        var pointsLen = thispoints.length;
         if (pointsLen == 0) {
             return;
         }
-        // var myIcon = new BMap.Icon("track.ico", new BMap.Size(20, 20), {
-        //     offset: new BMap.Size(20, 20)
-        // });
         var myIcon = new BMap.Icon("fly.ico", new BMap.Size(16, 16), {
             //offset: new BMap.Size(16, 16), // 指定定位位置
             //imageOffset: new BMap.Size(0, 0) // 设置图片偏移
         });
         // 创建标注对象并添加到地图   
-        /*for (var i = 0; i < pointsLen; i++) {
-            var point = new BMap.Point(points[i].lng, points[i].lat);
-            var marker = new BMap.Marker(point, {
-                icon: myIcon
-            });
-            //var label=new BMap.Label("test");
-            //marker.setLabel(label);  
-            console.log(angle);  
-            marker.setRotation(angle);//设置旋转角度
-            //map.clearOverlays(marker); //清除折线
-            map.addOverlay(marker);
-        }*/
-        var point = new BMap.Point(points[pointsLen-1].lng, points[pointsLen-1].lat);
+        var point = new BMap.Point(thispoints[pointsLen - 1].lng, thispoints[pointsLen - 1].lat);
         marker = new BMap.Marker(point, {
             icon: myIcon
         });
-        var label=new BMap.Label(pointsLen-1);
-        //marker.setLabel(label);  
-        //console.log(angle);  
-        marker.setRotation(angle);//设置旋转角度
+        var label = new BMap.Label(pointsLen - 1);
+        marker.setRotation(angle); //设置旋转角度
         map.addOverlay(marker);
     }
 
     //添加线
     function addLine(thispoints) {
-        map.removeOverlay(polyline); //清除折线
+        //map.removeOverlay(polyline); //清除折线
         var linePoints = [];
         var pointsLen = thispoints.length;
-        var i; 
-        
+        var i;
+
         if (pointsLen == 0) {
             return;
         }
@@ -115,31 +211,25 @@
             linePoints.push(new BMap.Point(thispoints[i].lng, thispoints[i].lat));
         }
 
-        // var convertor = new BMap.Convertor();
-        // convertor.translate(linePoints, 1, 5, function(data){
-        //     console.log(data);
-        //     if(data.status === 0) {
-        //         polyline = new BMap.Polyline(data.points, {
-        //             strokeColor: "green",
-        //             strokeWeight: 1,
-        //             strokeOpacity: 1,
-        //         }); //创建折线
-        //         map.addOverlay(polyline); //增加折线
-        //     }
-        // });  
-                polyline = new BMap.Polyline(linePoints, {
+        var convertor = new BMap.Convertor();
+        convertor.translate(linePoints, 1, 5, function(data) {
+            console.log(data);
+            if (data.status === 0) {
+                var polyline = new BMap.Polyline(data.points, {
                     strokeColor: "green",
                     strokeWeight: 1,
                     strokeOpacity: 1,
                 }); //创建折线
                 map.addOverlay(polyline); //增加折线
+            }
+        });
     }
 
     //添加虚线
     function addDashedLine(thispoints) {
         var linePoints = [];
         var pointsLen = thispoints.length;
-        var i; 
+        var i;
         var polylineDashed;
         if (pointsLen == 0) {
             return;
@@ -148,114 +238,43 @@
         for (i = 0; i < pointsLen; i++) {
             linePoints.push(new BMap.Point(thispoints[i].lng, thispoints[i].lat));
         }
-
-        // var convertor = new BMap.Convertor();
-        // convertor.translate(linePoints, 1, 5, function(data){
-        //     console.log(data);
-        //     if(data.status === 0) {
-        //         polylineDashed = new BMap.Polyline(data.points, {
-        //             strokeColor: "red",
-        //             strokeWeight: 1,
-        //             strokeOpacity: 0.8,
-        //             strokeStyle: 'dashed'
-        //         }); //创建折线
-        //         map.addOverlay(polylineDashed); //增加虚折线
-        //     }
-        // });
-        polylineDashed = new BMap.Polyline(linePoints, {
-            strokeColor: "red",
-            strokeWeight: 1,
-            strokeOpacity: 0.8,
-            strokeStyle: 'dashed'
-        }); //创建折线
-        map.addOverlay(polylineDashed); //增加虚折线
+        var convertor = new BMap.Convertor();
+        convertor.translate(linePoints, 1, 5, function(data) {
+            console.log(data);
+            if (data.status === 0) {
+                polylineDashed = new BMap.Polyline(data.points, {
+                    strokeColor: "red",
+                    strokeWeight: 1,
+                    strokeOpacity: 0.8,
+                    strokeStyle: 'dashed'
+                }); //创建折线
+                map.addOverlay(polylineDashed); //增加虚折线
+            }
+        });
     }
 
     //新的点，加入到轨迹中。
-    function dynamicLine() {
-        //var lng = 100+getRandom(40);
-        //var lat = 35+getRandom(30);
-        lng += 1;
-        lat += 2;
-        var id = getRandom(1000);
-        var point = {
-            "lng": lng,
-            "lat": lat,
-            "status": 1,
-            "id": id
+    function dynamicLine() {        
+        if (preNum >= pointsReal.length) {
+            return;
         }
+        var point = pointsReal[preNum];
         var makerPoints = [];
-        //var newLinePoints = [];
-        //var len;
+        var newLinePoints = [];
+        var len;
         makerPoints.push(point);
-        //console.log(makerPoints);
         points.push(point);
-        //bPoints.push(new BMap.Point(lng, lat));
-        //len = points.length;
-        //newLinePoints = points.slice(len - 2, len); //最后两个点用来画线。
-        //newPointsDashed = pointsDashed.slice(points.length - 1, pointsDashed.length);
-        //console.log(points, newPointsDashed)
-
-        //map.clearOverlays(); //清除折线
+        len = points.length;
+        newLinePoints = points.slice(len - 2, len); //最后两个点用来画线。
         var angle = 0; //飞机角度
         if (preNum > 0) {
             angle = findRotation(points[preNum - 1], points[preNum]);
         }
         preNum++;
+        addLine(newLinePoints); //增加轨迹线
         addMarker(makerPoints, angle); //增加对应该的轨迹点
-        addLine(points); //增加轨迹线
-        //setZoom(bPoints);
         setTimeout(dynamicLine, 1000);
     }
-
-    //根据点信息实时更新地图显示范围，让轨迹完整显示。设置新的中心点和显示级别. 
-    //更新。设置不是每次增加点都重新设置显示范围。因为有可能会想放大了看。
-    // function setZoom(bPoints) {
-    //     var view = map.getViewport(eval(bPoints));
-    //     console.log(view);
-    //     if (map.oldView != JSON.stringify(view)) {
-    //         var mapZoom = view.zoom;
-    //         var centerPoint = view.center;
-    //         map.centerAndZoom(centerPoint, mapZoom);
-    //         map.oldView = JSON.stringify(view);
-    //     }
-    // }
-
-    //数据准备,
-    var polyline = null;
-    var marker = null;//飞机模型
-    var preNum = 0; //上一个点
-    var lng = 100;
-    var lat = 35;
-    var lng02 = lng;
-    var lat02 = lat;
-    var points = []; //原始点信息数组
-    var pointsDashed = []; //计划，点信息数组
-    //var newPointsDashed = []; //计划，点信息数组
-    //var bPoints = []; //百度化坐标数组。用于更新显示范围。
-    for (var k = 0; k < 10; k++) {
-        var id = 'b' + k;
-        lng02 += 1;
-        lat02 += 2;
-        pointsDashed.push({
-            "lng": lng02,
-            "lat": lat02,
-            "status": 1,
-            "id": id
-        });
-    }
-    
-    //newPointsDashed = pointsDashed.slice(points.length, pointsDashed.length);
-    //地图操作开始
-    var map = new BMap.Map("container");
-
-    map.centerAndZoom(new BMap.Point(103.388611, 35.563611), 5); //初始显示中国。
-    map.enableScrollWheelZoom(); //滚轮放大缩小
-
-    //画虚线
-    addDashedLine(pointsDashed);
-    //setTimeout(dynamicLine, 2000); //动态生成新的点。
-    dynamicLine(); //动态生成新的点。
     </script>
 </body>
 
