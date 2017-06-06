@@ -38,16 +38,65 @@
         color: #fff;
         background: rgb(0, 127, 209);
     }
-    
-    .pop-center {
+    .hide{
+        display: none;
+    }
+
+    #pop {
+        height: 100%;
+    }
+    .pop-main {
         position: fixed;
-        left: 50%;
         top: 50%;
-        margin: -120px 0 0 -120px;
-        padding: 20px;
-        width: 200px;
-        height: 200px;
-        background: #ccc;
+        left: 50%;
+        width: 80%;
+        margin: -30% 0 0 -40%;
+        background: #fff;
+        z-index: 112;
+    }
+
+    .pop-head {
+        padding: 10px 10px 0;
+        font-size: 14px;
+        color: rgb(0, 87, 196);
+    }
+
+    .pop-head02 {
+        text-align: center;
+        padding: 20px 0 10px;
+    }
+
+    .pop-con {
+        padding: 10px 10px 0;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .pop-con textarea {
+        margin-top: 8px;
+        margin-bottom: 0;
+        display: block;
+        padding: 4px;
+        width: 100%;
+        height: 50px;
+        color: #333;
+        font-size: 12px;
+    }
+
+    .pop-mark {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: .7;
+        z-index: 111;
+    }
+
+    .pop-bottom {
+        padding: 10px;
+        text-align: center;
     }
     </style>
 </head>
@@ -458,10 +507,49 @@
                 <textarea class="fl issue-con" placeholder="您还想在排行榜看到什么，或者有什么好的想法？请把建议提给我们（运行网项目组）。"></textarea>
                 <a class="fr btn-issue" href="javascript:;">建议</a>
             </div>
-            <div class="pop-center" style="">
-                <input type="text" name="" placeholder="评论" />
+            <div id="pop">
+              <div id="popInput" class="pop-main hide" style="display: block;">
+                  <div class="pop-head">添加“<span>王丹丹(231221)</span>”为好友</div>
+                  <div class="pop-con">
+                      请输入验证信息
+                      <textarea maxlength="16">你好，我是</textarea>
+                  </div>
+                  <div class="pop-bottom">
+                      <button class="btn-enter">发送</button>
+                      <button class="btn-cancel">取消</button>
+                  </div>
+              </div>
+              <div id="popSuccess" class="pop-main hide">
+                  <div class="pop-head pop-head02">成功发送好友请求！等待对方验证通过。</div>
+                  <div class="pop-bottom">
+                      <button class="btn-enter">确定</button>
+                  </div>
+              </div>
+              <div id="popCancel" class="pop-main hide">
+                  <div class="pop-head pop-head02">确定要取消好友？</div>
+                  <div class="pop-bottom">
+                      <button class="btn-enter">确定</button>
+                      <button class="btn-cancel">取消</button>
+                  </div>
+              </div>
+              <div class="pop-mark hide"></div>
             </div>
         </div>
     </div>
+    <!--     <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.js"></script>
+    <script>
+    var client_h = document.documentElement.clientHeight;
+    $(window).on("resize", function() {
+        var body_h = document.body.scrollHeight;
+        if (body_h < client_h) {
+            $(".toplist-form").css({'position': 'absolute'});
+            console.log("小了");
+        } else {
+            console.log("正常");
+            $(".toplist-form").css({'position': 'fixed'});
+        }
+    });
+    </script> -->
 </body>
+
 </html>
