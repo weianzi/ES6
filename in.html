@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html style="min-height: 0px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- 自己写的样式表-->
+    <style type="text/css">
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .toplist-form {
+        position: fixed;
+        height: 50px!important;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+    }
+    
+    .toplist-form textarea {
+        width: 85%;
+        padding: 6px;
+        height: 46px;
+        border: 0;
+        font-size: 12px;
+        overflow: hidden;
+    }
+    
+    .toplist-form .fr {
+        width: 15%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        color: #fff;
+        background: rgb(0, 127, 209);
+    }
+    
+    .pop-center {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin: -120px 0 0 -120px;
+        padding: 20px;
+        width: 200px;
+        height: 200px;
+        background: #ccc;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="main" data-view="$StackView">
+        <div id="friend-main" data-view="com.csair.friend/home" style="position: absolute; top: 0px; bottom: 0px; width: 100%; z-index: 100;" class="">
+            <header class="bar bar-nav bar-title">
+                <a id="back" class="button back" hrefdisable="cube://exit" cube-action="pop">
+                    <img src="img/icon_back.ing">
+                </a>
+                <h1 class="title">乘务飞友</h1>
+                <a class="button btn-totop" href="javascript:;">排行榜</a>
+                <a class="button btn-tome" href="javascript:;">我的成绩单</a>
+            </header>
+            <div class="content" style="height: 667px; overflow: hidden;">
+                <div class="boxContent" style="display:block;">
+                    <div class="contet" id="friendMain">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr class="navlit">
+                                    <td class="navButton" style="width:50%" state="friendList">
+                                        飞友列表
+                                    </td>
+                                    <td class="split">
+                                        <img class="splitImg" src="img/split_double.ing">
+                                    </td>
+                                    <td class="navButton active" state="airport">机组任务查询</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" class="scroll-slot">
+                                        <div class="scroll-lite" style="left: 191px; width: 184px;"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="funcBlock" id="friendList" style="display: none;">
+                            <div class="friendList">
+                                <div style="height: 578px;">
+                                    <div id="friendListHome" data-component="list" class="cube-list-grouped" data--iscroll-="iscroll0" style="height: 100%; overflow: hidden;">
+                                        <ul class="contentScroller" style="transition-property: -webkit-transform; transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1); transform: translate(0px, 0px) scale(1) translateZ(0px); transition-duration: 0ms;">
+                                            <div class="item-content">
+                                                <li class="cube-list-item" index="0">
+                                                    <li class="friend-item" data-id="182120">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王琳B</h3>
+                                                                <span>182120</span>
+                                                            </div>
+                                                            <p class="fr vi-cen5">
+                                                                <i></i>
+                                                            </p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="1">
+                                                    <li class="friend-item" data-id="735350">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王丹丹</h3>
+                                                                <span>735350</span>
+                                                            </div>
+                                                            <p class="fr vi-cen5">
+                                                                <i></i>
+                                                            </p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="2">
+                                                    <h4 class="title-request">好友请求</h4>
+                                                </li>
+                                                <li class="cube-list-item-more-record" style="border-bottom: 0px;">无更多相关记录</li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="funcBlock" id="airport" style="display: block;">
+                            <div class="inputContainer">
+                                <input placeholder="员工号/姓名" id="staffNo">
+                            </div>
+                            <!-- 盛放其他内容-->
+                            <div class="inputContainer calendar" style="margin-top:15px;">
+                                <table id="birthday-container" style="width:100%;">
+                                    <tbody>
+                                        <tr class="dateRow saveStrDate" state="startTime">
+                                            <td class="fieldTitleBig" state="startTime" id="start">
+                                                <span>开始时间</span>
+                                            </td>
+                                            <td>
+                                                <img class="splitImg" src="img/split_single.ing" align="middle" valign="middle" style="height:30px;">
+                                            </td>
+                                            <td style="position:relative;left:0px;top:0px;padding: 0 0 8px 8px;">
+                                                <input data-showinit="true" id="startTime" name="startTime" style="width:100%;text-indent:0px;border-radius: 5px;" class="cube-datepicker saveDateClass" data-yearchangeable="true" data-monthchangeable="true" data-selectyearbefore="10" data-selectyearafter="20" data-parentel="body" readonly="readonly">
+                                            </td>
+                                            <td valign="middle" align="right" style="padding-right:5px;" id="strimg" state="startTime">
+                                                <img src="img/icon_calendar.ing" style="width:25px;height:25px">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="inputContainer calendar" style="margin-top:15px;">
+                                <table id="birthday-container" style="width:100%;">
+                                    <tbody>
+                                        <tr class="dateRow saveEndDate" state="endTime">
+                                            <td class="fieldTitleBig" state="endTime" id="end">
+                                                <span>结束时间</span>
+                                            </td>
+                                            <td>
+                                                <img class="splitImg" src="img/split_single.ing" align="middle" valign="middle" style="height:30px">
+                                            </td>
+                                            <td style="position:relative;left:0px;top:0px;padding: 0px 0px 8px 8px;">
+                                                <input data-showinit="true" id="endTime" name="endTime" style="width:100%;text-indent:0px;border-radius: 5px;" class="cube-datepicker saveDateClass after5days" data-yearchangeable="true" data-monthchangeable="true" data-selectyearbefore="10" data-selectyearafter="20" data-parentel="body" readonly="readonly">
+                                            </td>
+                                            <td valign="middle" align="right" style="padding-right:5px;" id="endimg" state="endTime">
+                                                <img src="img/icon_calendar.ing" style="width:25px;height:25px">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="width:100%;text-align:center;padding-top:18px;">
+                                <button class="csair-btn" id="query" style="width:90%;text-align:center;padding:10px;">查&nbsp;询</button>
+                                <div class="search-tips">支持<span>同基地</span>乘务员/安全员互相查班</div>
+                            </div>
+                            <!-- 底部查询记录-->
+                            <div class="historyStorePad" style="position: fixed;">
+                                <div class="historyhandle">查询历史</div>
+                                <div class="actions">
+                                    <div class="item">员工号&nbsp;:&nbsp;&nbsp;761953</div>
+                                    <div class="item">姓名&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;王丹丹</div>
+                                    <div class="item">员工号&nbsp;:&nbsp;&nbsp;724728</div>
+                                    <div class="item">员工号&nbsp;:&nbsp;&nbsp;735350</div>
+                                    <div class="item">姓名&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;苏梦媛</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="entryBlock" style="display:none;">
+                <div class="lee-dialog-screen lee-dialog-screen-model" style="z-index: 1000; display: block; height: 100%; position:fixed;background-color:rgba(0,0,0,0.7);opacity:1;"></div>
+                <div class="lee-dialog-screen lee-dialog-screen-model" style="opacity:1;background-color:transparent;z-index: 1000; display: block; height: 100%; position:fixed;">
+                    <div class="lee-dialog ui-corner-all" style="opacity:1;position:relative; min-width: 260px; height: auto; top: 30%; margin:auto;   width: 300px;background-color:white;border:0px solid white !important;">
+                        <div style="background-color:white;width:100%;height:240px;border:0px;padding:0px;">
+                            <div style="width:100%;background-color:#5397ED;height:40px;">
+                                <table style="width:100%;height:100%;color:white;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width:85px;" align="right">
+                                                <img src="img/icon_disblog.ing" style="padding-left:20px;height:20px;width:20px;">
+                                            </td>
+                                            <td align="left">重名人员选择</td>
+                                            <td align="right">
+                                                <img src="img/icon_divingair.ing" style="height:30px;width:auto;">
+                                            </td>
+                                            <td align="right" style="padding-right:5px;width:35px" id="closeDialog">关闭</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="nameList listSlider-content" style="height:200px;">
+                                <ul>
+                                    <div class="item-content">
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="friendTop" class="page" style="position: absolute; top: 0px; bottom: 0px; width: 100%; z-index: 101;">
+            <meta name="format-detection" content="telephone=no">
+            <div id="animateHolder"></div>
+            <header class="bar bar-nav bar-title">
+                <a id="back" class="button back">
+                    <img src="img/icon_back(1).ing">
+                </a>
+                <h1 class="title">
+        <div style="height:40px;margin:auto;width:50%;position:relative;overflow:hidden;padding-left:10px;">
+            <div class="marqueeinnerTitle">
+                <span id="innerTitle" style="margin:auto">排行榜</span>
+            </div>
+        </div>
+    </h1>
+            </header>
+            <div class="content" style="height: 667px; overflow: hidden;">
+                <div class="boxContent" style="height:623px;">
+                    <div class="contet">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr class="navlit">
+                                    <td style="width:32%;" class="navButton active" state="curMonth">当月</td>
+                                    <td class="split">
+                                        <img class="splitImg" src="img/split_double.ing">
+                                    </td>
+                                    <td style="width:32%;" class="navButton" state="preMonth">上月</td>
+                                    <td class="split">
+                                        <img class="splitImg" src="img/split_double.ing">
+                                    </td>
+                                    <td style="width:32%;" class="navButton" state="allYear">全年</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="scroll-slot">
+                                        <div class="scroll-lite" style="width:33.33%;"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="curMonth" class="funcBlock" style="display: block;">
+                            <div class="top-text-box">
+                                <div class="top-text">
+                                    <p>截至昨23:59，您当月的飞行时间为</p>
+                                    <div class="time">
+                                        <span class="green" id="curMonthTime">14:46</span>
+                                        <br>小时
+                                    </div>
+                                    <p>
+                                        <!-- 超越了<span class="green" id="curMonthPer">90%</span>乘务员， -->好友中列第 <span class="green" id="curMonthRanking">1</span> 名</p>
+                                </div>
+                            </div>
+                            <div class="friendList friendTopList">
+                                <div style="height: 498px;">
+                                    <div id="curMonthList" data-component="list" class="cube-list-grouped" data--iscroll-="iscroll13" style="height: 100%; overflow: hidden;">
+                                        <ul class="contentScroller" style="transition-property: -webkit-transform; transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1); transform: translate(0px, 0px) translateZ(0px);">
+                                            <div class="item-content">
+                                                <li class="cube-list-item" index="0">
+                                                    <li class="friend-item mine" data-id="724728">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">1</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>苏梦媛</h3>
+                                                                <span>724728</span>
+                                                            </div>
+                                                            <p class="fr green">14:46</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="1">
+                                                    <li class="friend-item " data-id="182120">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">2</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王琳B</h3>
+                                                                <span>182120</span>
+                                                            </div>
+                                                            <p class="fr green">12:18</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="2">
+                                                    <li class="friend-item " data-id="735350">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">3</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王丹丹</h3>
+                                                                <span>735350</span>
+                                                            </div>
+                                                            <p class="fr green">0:0</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item-more-record" style="border-bottom: 0px;">无更多相关记录</li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="preMonth" class="funcBlock">
+                            <div class="top-text-box">
+                                <div class="top-text">
+                                    <p>您上月的飞行时间为</p>
+                                    <div class="time">
+                                        <span class="green" id="preMonthTime">94:17</span>
+                                        <br>小时
+                                    </div>
+                                    <p>
+                                        <!-- 超越了<span class="green" id="preMonthPer">90%</span>乘务员， -->好友中列第 <span class="green" id="preMonthRanking">2</span> 名</p>
+                                </div>
+                            </div>
+                            <div class="friendList friendTopList">
+                                <div style="height: 667px;">
+                                    <div id="preMonthList" data-component="list" class="cube-list-grouped" data--iscroll-="iscroll14" style="height: 100%; overflow: hidden;">
+                                        <ul class="contentScroller" style="transition-property: -webkit-transform; transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1); transform: translate(0px, 0px) translateZ(0px);">
+                                            <div class="item-content">
+                                                <li class="cube-list-item" index="0">
+                                                    <li class="friend-item " data-id="735350">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">1</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王丹丹</h3>
+                                                                <span>735350</span>
+                                                            </div>
+                                                            <p class="fr green">101:42</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="1">
+                                                    <li class="friend-item mine" data-id="724728">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">2</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>苏梦媛</h3>
+                                                                <span>724728</span>
+                                                            </div>
+                                                            <p class="fr green">94:17</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="2">
+                                                    <li class="friend-item " data-id="182120">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">3</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王琳B</h3>
+                                                                <span>182120</span>
+                                                            </div>
+                                                            <p class="fr green">84:15</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item-more-record" style="border-bottom: 0px;">无更多相关记录</li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="allYear" class="funcBlock">
+                            <div class="top-text-box">
+                                <div class="top-text">
+                                    <p>截至昨23:59，您全年的飞行时间为</p>
+                                    <div class="time">
+                                        <span class="green" id="allYearTime">457:17</span>
+                                        <br>小时
+                                    </div>
+                                    <p>
+                                        <!-- 超越了<span class="green" id="allYearPer">90%</span>乘务员， -->好友中列第 <span class="green" id="allYearRanking">3</span> 名</p>
+                                </div>
+                            </div>
+                            <div class="friendList friendTopList">
+                                <div style="height: 667px;">
+                                    <div id="allYearList" data-component="list" class="cube-list-grouped" data--iscroll-="iscroll15" style="height: 100%; overflow: hidden;">
+                                        <ul class="contentScroller" style="transition-property: -webkit-transform; transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1); transform: translate(0px, 0px) translateZ(0px);">
+                                            <div class="item-content">
+                                                <li class="cube-list-item" index="0">
+                                                    <li class="friend-item " data-id="182120">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">1</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王琳B</h3>
+                                                                <span>182120</span>
+                                                            </div>
+                                                            <p class="fr green">470:22</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="1">
+                                                    <li class="friend-item " data-id="735350">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">2</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>王丹丹</h3>
+                                                                <span>735350</span>
+                                                            </div>
+                                                            <p class="fr green">461:57</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item" index="2">
+                                                    <li class="friend-item mine" data-id="724728">
+                                                        <a class="clearfix" href="javascript:;">
+                                                            <span class="fl num">3</span>
+                                                            <img class="fl" src="img/FHA.ing">
+                                                            <div class="fl">
+                                                                <h3>苏梦媛</h3>
+                                                                <span>724728</span>
+                                                            </div>
+                                                            <p class="fr green">457:17</p>
+                                                        </a>
+                                                    </li>
+                                                </li>
+                                                <li class="cube-list-item-more-record" style="border-bottom: 0px;">无更多相关记录</li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="toplist-form clearfix">
+                <textarea class="fl issue-con" placeholder="您还想在排行榜看到什么，或者有什么好的想法？请把建议提给我们（运行网项目组）。"></textarea>
+                <a class="fr btn-issue" href="javascript:;">建议</a>
+            </div>
+            <div class="pop-center" style="">
+                <input type="text" name="" placeholder="评论" />
+            </div>
+        </div>
+    </div>
+</body>
+</html>
